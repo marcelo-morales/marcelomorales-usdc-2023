@@ -22,9 +22,29 @@
     /** You will need to implement your search and 
      * return the appropriate object here. */
 
-    var result = {
-        "SearchTerm": "",
-        "Results": []
+    let resultArray = []
+
+    for (const property in scannedTextObj) {
+
+        let bookInfo = scannedTextObj[property];
+        let isbn = bookInfo.ISBN;
+        let bookContent = bookInfo.Content;
+
+        for (const currentContent of bookContent) {
+            let text = currentContent.Text;
+
+            if (text.includes(searchTerm)) {
+                let foundLine = {"ISBN":isbn, "Page":currentContent.Page, "Line":currentContent.Line};
+                resultArray.push(foundLine)
+            }
+        }
+
+      }
+
+
+    let result = {
+        "SearchTerm": searchTerm,
+        "Results": resultArray,
     };
     
     return result; 
@@ -34,6 +54,18 @@
 const twentyLeaguesIn = [
     {
         "Title": "Twenty Thousand Leagues Under the Sea",
+        "ISBN": "9780000528531",
+        "Content": [
+            {
+                "Page": 31,
+                "Line": 8,
+                "Text": "now simply went on by her own momentum.  The dark-"
+            }
+        ] 
+    },
+
+    {
+        "Title": "Sample Title Used for Testing",
         "ISBN": "9780000528531",
         "Content": [
             {
@@ -54,6 +86,58 @@ const twentyLeaguesIn = [
         ] 
     }
 ]
+
+/** Another example input object. */
+const greatExpectations = [
+    {
+        "Title": "Great Expectations",
+        "ISBN": "9780000528599",
+        "Content": [
+            {
+                "Page": 72,
+                "Line": 9,
+                "Text": "I must be taken as I have been made. The success is not-"
+            }
+        ] 
+    }
+]
+
+/** Final example input object. */
+const janeLittleWomanBooks = [
+    {
+        "Title": "Jane Eyre",
+        "ISBN": "9780000528531",
+        "Content": [
+            {
+                "Page": 83,
+                "Line": 8,
+                "Text": "I can live alone, if self-respect, and circumstances require me so to do. I need not sell my soul to buy bliss."
+            }
+        ] 
+    },
+
+    {
+        "Title": "Little Line",
+        "ISBN": "9780000528999",
+        "Content": [
+            {
+                "Page": 111,
+                "Line": 15,
+                "Text": "Be worthy, love, and love will come."
+            },
+            {
+                "Page": 111,
+                "Line": 16,
+                "Text": "Now and then, in this workaday world, things do happen in the delightful storybook fashion, "
+            },
+            {
+                "Page": 111,
+                "Line": 17,
+                "Text": "and what a comfort it is."
+            } 
+        ] 
+    }
+]
     
 /** Example output object */
 const twentyLeaguesOut = {
@@ -63,6 +147,30 @@ const twentyLeaguesOut = {
             "ISBN": "9780000528531",
             "Page": 31,
             "Line": 9
+        }
+    ]
+}
+
+/** Second output object */
+const greatExpectationsOut = {
+    "SearchTerm": "success",
+    "Results": [
+        {
+            "ISBN": "9780000528599",
+            "Page": 72,
+            "Line": 9
+        }
+    ]
+}
+
+/** Third output object */
+const janeLittleWomanOut = {
+    "SearchTerm": "circumstances",
+    "Results": [
+        {
+            "ISBN": "9780000528531",
+            "Page": 83,
+            "Line": 8
         }
     ]
 }
@@ -102,3 +210,24 @@ if (test2result.Results.length == 1) {
     console.log("Expected:", twentyLeaguesOut.Results.length);
     console.log("Received:", test2result.Results.length);
 }
+
+/** Unit test for Great Expectations Book. */
+const test3result = findSearchTermInBooks("success", greatExpectations); 
+if (JSON.stringify(greatExpectationsOut) === JSON.stringify(test3result)) {
+    console.log("PASS: Test 3");
+} else {
+    console.log("FAIL: Test 3");
+    console.log("Expected:", greatExpectationsOut.Results.length);
+    console.log("Received:", test3result.Results.length);
+}
+
+/** Unit test for with sample input containing more than two novels. */
+const test4result = findSearchTermInBooks("circumstances", janeLittleWomanBooks); 
+if (JSON.stringify(janeLittleWomanOut) === JSON.stringify(test4result)) {
+    console.log("PASS: Test 4");
+} else {
+    console.log("FAIL: Test 4");
+    console.log("Expected:", janeLittleWomanOut.Results.length);
+    console.log("Received:", test4result.Results.length);
+}
+
