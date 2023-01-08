@@ -22,6 +22,13 @@
     /** You will need to implement your search and 
      * return the appropriate object here. */
 
+    if (searchTerm === null || searchTerm === "" || scannedTextObj === null) {
+        return {
+            "SearchTerm": "",
+            "Results": "",
+        };
+    }
+
     let resultArray = []
 
     for (const property in scannedTextObj) {
